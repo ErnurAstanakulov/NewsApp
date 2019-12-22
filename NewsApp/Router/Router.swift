@@ -10,6 +10,7 @@ import UIKit
 
 class Router: RouterProtocol {
     
+    // MARK:- Properties
     var navigationController: UINavigationController
     var moduleBuilder: ModuleBuilderProtocol
     
@@ -21,7 +22,6 @@ class Router: RouterProtocol {
     func initialViewController() {
         navigationController.viewControllers = [moduleBuilder.createTabBar(router: self)]
     }
-    
     
     func createEverythingDetail(_ article: ArticleObject) {
         let detailViewController = moduleBuilder.createEverythingDetail(router: self, with: article)

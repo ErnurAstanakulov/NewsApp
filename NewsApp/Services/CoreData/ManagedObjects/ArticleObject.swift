@@ -1,49 +1,13 @@
 //
-//  Everything.swift
+//  ArticleObject.swift
 //  NewsApp
 //
-//  Created by psuser on 12/21/19.
+//  Created by psuser on 12/23/19.
 //  Copyright © 2019 psuser. All rights reserved.
 //
 
 import Foundation
 import CoreData
-
-@objc(Everything)
-public final class Everything: NSManagedObject {
-    // MARK: - Properties NSManaged
-    @NSManaged public var news: NewsObject?
-
-   @nonobjc public class func fetchRequest() -> NSFetchRequest<Everything> {
-        return NSFetchRequest<Everything>(entityName: "Everything")
-    }
-}
-
-@objc(NewsObject)
-public class NewsObject: NSObject, NSCoding {
-    
-    var status: String?
-    var totalResults: Int?
-    var articles: [ArticleObject]?
-    public func encode(with coder: NSCoder) {
-        coder.encode(status, forKey: "status")
-        coder.encode(totalResults, forKey: "totalResults")
-        coder.encode(articles, forKey: "articles")
-    }
-    
-    init(status: String?, totalResults: Int?, articles: [ArticleObject]?) {
-        self.status = status
-        self.totalResults = totalResults
-        self.articles = articles
-    }
-    
-    public required convenience init?(coder: NSCoder) {
-        let articles = coder.decodeObject(forKey: "articles") as? [ArticleObject]
-        let status = coder.decodeObject(forKey: "status") as? String
-        let totalResults = coder.decodeObject(forKey: "totalResults") as? Int
-        self.init(status: status, totalResults: totalResults, articles: articles)
-    }
-}
 
 @objc(ArticleObject)
 public class ArticleObject: NSObject, NSCoding {
@@ -88,27 +52,5 @@ public class ArticleObject: NSObject, NSCoding {
         let publishedAt = coder.decodeObject(forKey: "publishedAt") as? String
         let content = coder.decodeObject(forKey: "content") as? String
         self.init(source: source, author: author, title: title, descriptionNews: descriptionNews, url: url, urlToImage: urlToImage, publishedAt: publishedAt, content: content)
-    }
-}
-
-@objc(SourceObject)
-public class SourceObject: NSObject, NSCoding {
-    var id: String?
-    var name: String?
-    
-    init(id: String?, name: String?) {
-        self.id = id
-        self.name = name
-    }
-    
-    public func encode(with coder: NSCoder) {
-        coder.encode(id, forKey: "id")
-        coder.encode(name, forKey: "name")
-    }
-    
-    public required convenience init?(coder: NSCoder) {
-        let id = coder.decodeObject(forKey: "id") as? String
-        let name = coder.decodeObject(forKey: "name") as? String
-        self.init(id: id, name: name)
     }
 }

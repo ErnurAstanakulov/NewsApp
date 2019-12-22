@@ -9,6 +9,8 @@
 import UIKit
 
 class ModuleBuilder: ModuleBuilderProtocol {
+    
+    // MARK:- Properties
     let appServices = AppServices()
     weak var mainRouter: RouterProtocol!
 

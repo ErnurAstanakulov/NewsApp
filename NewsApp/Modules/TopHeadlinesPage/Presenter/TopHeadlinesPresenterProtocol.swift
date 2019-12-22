@@ -11,4 +11,7 @@ import Foundation
 protocol TopHeadlinesPresenterProtocol: BasePresenterProtocol {
     init(view: TopHeadlinesViewProtocol, router: RouterProtocol, services: AppServices)
     func backgroundTimer()
+    var lastNews: News? { get set }
+    var firstNews: News? { get set }
+    var news: News? { get }
 }

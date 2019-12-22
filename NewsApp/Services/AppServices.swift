@@ -16,15 +16,7 @@ class AppServices: AppServicesProtocol {
     var networkService: NetworkServiceProtocol { return NetworkService() }
 }
 
-protocol CoreDataProvider {
-    var coreDataService: CoreDataServiceProtocol { get }
-}
-
 protocol NetworkProvider {
     var networkService: NetworkServiceProtocol { get }
 }
 
-protocol CoreDataServiceProtocol {
-    func getNews(for entity: DataEntity) -> NewsObject?
-    func save(_ news: NewsObject, to entity: DataEntity)
-}

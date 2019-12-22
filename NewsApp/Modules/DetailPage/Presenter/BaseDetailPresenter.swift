@@ -10,6 +10,7 @@ import Foundation
 
 class BaseDetailPresenter: BaseDetailPresenterProtocol {
     
+    // MARK:- Properties
     private weak var view: BaseDetailViewProtocol!
     private let model: ArticleObject!
     

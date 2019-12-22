@@ -11,6 +11,7 @@ import CoreData
 
 @objc(TopHeadlines)
 public final class TopHeadlines: NSManagedObject {
+
     // MARK: - Properties NSManaged
     @NSManaged public var news: NewsObject?
 

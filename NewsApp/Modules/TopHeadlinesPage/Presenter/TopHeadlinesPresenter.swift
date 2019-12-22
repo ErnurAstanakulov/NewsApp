@@ -9,11 +9,12 @@
 import UIKit
 
 class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
-       
+    
+    // MARK:- Properties
+    private let quene = DispatchQueue(label: "concurrent", attributes: .concurrent)
     var page: Int = 1
     var artObjects: [ArticleObject] = []
     var timer: Timer?
-    private let quene = DispatchQueue(label: "concurrent", attributes: .concurrent)
     var lastNews: News?
     var firstNews: News?
     var news: News? {
@@ -24,7 +25,7 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
         return new
     }
     
-    weak var view: TopHeadlinesViewProtocol?
+    weak var view: TopHeadlinesViewProtocol!
     let router: RouterProtocol
     let services: AppServices
     
@@ -34,12 +35,17 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
         self.services = services
     }
     
+    deinit {
+        timer = nil
+    }
+    
+    // MARK:- Repeate request news
     func backgroundTimer() {
         timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(performRepeat), userInfo: nil, repeats: true)
     }
     
     @objc func performRepeat() {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self = self else { return }
             print("1: ", Thread.current)
             self.loadTopHeadlines(page: 1) { [weak self] result in
@@ -50,8 +56,8 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
                 case .success(let news):
                     presenter.view?.showActivityIndicator(false)
                     if presenter.firstNews != news {
-                        print("CHECK THERE: /(\(news.articles?.first?.author))")
-                        print("CHECK THERE 2: /(\(presenter.firstNews?.articles?.first?.author))")
+                        print("CHECK THERE: /(\(String(describing: news.articles?.first?.author)))")
+                        print("CHECK THERE 2: /(\(String(describing: presenter.firstNews?.articles?.first?.author)))")
                         presenter.quene.async(flags: .barrier) {
                             print("5: ", Thread.current)
                             presenter.lastNews = news
@@ -65,18 +71,7 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
         }
     }
     
-    func performShows() {
-        print("2: ", Thread.current)
-        DispatchQueue.main.async {
-            guard let news = self.news else { return }
-                  var l = self
-                  let object = l.localSave(news)
-                  self.services.coreDataService.save(object, to: .topHeadlines)
-            self.view?.showNews(object)
-        }
-      
-    }
-    
+    // MARK:- Loading news
     func loadNews() {
         view?.showActivityIndicator(true)
         if let news = services.coreDataService.getNews(for: .topHeadlines), !UIDevice.isConnectedToNetwork {
@@ -93,7 +88,7 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
                     print("4: ", Thread.current)
                     if presenter.page == 1 {
                         presenter.firstNews = news
-                        print("CHECK HERE: /(\(news.articles?.first?.author))")
+                        print("CHECK HERE: /(\(String(describing: news.articles?.first?.author)))")
                     }
                     presenter.quene.async(flags: .barrier) {
                         print("3: ", Thread.current)
@@ -102,14 +97,10 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
                     presenter.page += 1
                     presenter.performShows()
                 case .failure(let error):
-                    presenter.view?.showMessage(with: error)
+                    presenter.view.showMessage(with: error)
                 }
             }
         }
-    }
-    
-    func showDetail(_ article: ArticleObject) {
-        router.createTopHeadlinesDetail(article)
     }
     
     private func loadTopHeadlines(page: Int, completion: @escaping (Result<News>) -> Void) {
@@ -123,5 +114,20 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
                 }
             }
         }
+    }
+        
+    func performShows() {
+        print("2: ", Thread.current)
+        guard let news = self.news else { return }
+        var l = self
+        let object = l.localSave(news)
+        self.services.coreDataService.save(object, to: .topHeadlines)
+        self.view.showNews(object)
+    }
+    
+    
+    // MARK:- Router
+    func showDetail(_ article: ArticleObject) {
+        router.createTopHeadlinesDetail(article)
     }
 }

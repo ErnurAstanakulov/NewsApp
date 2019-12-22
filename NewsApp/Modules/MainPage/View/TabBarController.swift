@@ -55,7 +55,6 @@ extension TabBarController: ViewInitalizationProtocol {
 
 extension TabBarController: TabBarViewProtocol {
     func setPages(_ viewControllers: [UIViewController]) {
-        print("TAB BAR")
         let navViewControllers = viewControllers.map { UINavigationController(rootViewController: $0) }
         pagesTabBarController.setViewControllers(navViewControllers, animated: true)
     }

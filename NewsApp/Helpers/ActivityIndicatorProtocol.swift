@@ -22,5 +22,4 @@ extension ActivityIndicatorProtocol {
             activityIndicator.stopAnimating()
         }
     }
-    
 }

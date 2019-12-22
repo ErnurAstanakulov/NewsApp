@@ -11,9 +11,3 @@ import Foundation
 protocol TopHeadlinesViewProtocol: BaseViewProtocol {
     var news: NewsObject? { get set }
 }
-
-protocol BaseViewProtocol: class {
-    func showNews(_ news: NewsObject)
-    func showActivityIndicator(_ isShow: Bool)
-    func showMessage(with error: NetworkError)
-}

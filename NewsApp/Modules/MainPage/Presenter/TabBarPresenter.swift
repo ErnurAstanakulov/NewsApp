@@ -9,7 +9,9 @@
 import UIKit
 
 class TabBarPresenter: TabBarPresenterProtocol {
-    weak var view: TabBarViewProtocol?
+    
+    // MARK:- Properties
+    weak var view: TabBarViewProtocol!
     let router: RouterProtocol
     
     required init(view: TabBarViewProtocol, router: RouterProtocol) {
@@ -26,6 +28,6 @@ class TabBarPresenter: TabBarPresenterProtocol {
         let everythingTabItem = TabItem(icon: NewsAppImage.everything.uiImage, title: "EVERYTHING")
         everythingViewController.tabBarItem.title = everythingTabItem.title
         everythingViewController.tabBarItem.image = everythingTabItem.icon
-        view?.setPages([topHeadlineViewController, everythingViewController])
+        view.setPages([topHeadlineViewController, everythingViewController])
     }
 }

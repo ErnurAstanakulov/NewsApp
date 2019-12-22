@@ -10,25 +10,46 @@ import UIKit
 
 class ModuleBuilder: ModuleBuilderProtocol {
     let appServices = AppServices()
+    weak var mainRouter: RouterProtocol!
 
     func createTabBar(router: RouterProtocol) -> UIViewController {
         let view = TabBarController()
         let presenter = TabBarPresenter(view: view, router: router)
+        view.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         view.presenter = presenter
+        mainRouter = router
         return view
     }
     
-    func createTopHeadlines(router: RouterProtocol) -> UIViewController {
+    func createTopHeadlines() -> UIViewController {
         let view = TopHeadlinesViewController()
-        let presenter = TopHeadlinesPresenter(view: view, router: router, services: appServices)
+        view.navigationItem.title = "Топ"
+        let presenter = TopHeadlinesPresenter(view: view, router: mainRouter, services: appServices)
         view.presenter = presenter
         return view
     }
     
-    func createEverything(router: RouterProtocol) -> UIViewController {
+    func createEverything() -> UIViewController {
         let view = EverythingViewController()
-        let presenter = EverythingPresenter(view: view, appServices: appServices, router: router)
+        view.navigationItem.title = "Разное"
+        let presenter = EverythingPresenter(view: view, appServices: appServices, router: mainRouter)
         view.presenter = presenter
         return view
     }
+    
+    func createEverythingDetail(router: RouterProtocol, with article: ArticleObject) -> UIViewController {
+          let view = BaseDetailViewController()
+          let presenter = BaseDetailPresenter(view: view, model: article)
+          view.title = article.author
+          view.presenter = presenter
+          return view
+      }
+      
+      func createTopHeadlinesDetail(router: RouterProtocol, with article: ArticleObject) -> UIViewController {
+          let view = BaseDetailViewController()
+          let presenter = BaseDetailPresenter(view: view, model: article)
+          view.title = article.author
+          view.presenter = presenter
+          return view
+      } 
 }

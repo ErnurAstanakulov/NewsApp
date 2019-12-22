@@ -22,12 +22,14 @@ class Router: RouterProtocol {
         navigationController.viewControllers = [moduleBuilder.createTabBar(router: self)]
     }
     
-    func createTopHeadlines() {
-        
+    
+    func createEverythingDetail(_ article: ArticleObject) {
+        let detailViewController = moduleBuilder.createEverythingDetail(router: self, with: article)
+        navigationController.pushViewController(detailViewController, animated: true)
     }
     
-    func createEverythins() {
-        
+    func createTopHeadlinesDetail(_ article: ArticleObject) {
+        let detailViewController = moduleBuilder.createTopHeadlinesDetail(router: self, with: article)
+        navigationController.pushViewController(detailViewController, animated: true)
     }
-    
 }

@@ -44,4 +44,8 @@ class EverythingPresenter: EverythingPresenterProtocol {
             })
         }
     }
+    
+    func showDetail(_ article: ArticleObject) {
+        router.createEverythingDetail(article)
+    }
 }

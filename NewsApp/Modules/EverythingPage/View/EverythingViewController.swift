@@ -81,6 +81,13 @@ extension EverythingViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if let article = news?.articles?[indexPath.row] {
+            presenter?.showDetail(article)
+        }
+    }
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let articles = news?.articles else { return }
         if indexPath.row == articles.count - 1, UIDevice.isConnectedToNetwork {
@@ -114,7 +121,6 @@ extension EverythingViewController: EverythingViewProtocol {
     func showNews(_ news: NewsObject) {
         self.news = news
         stopRefresh()
-        print(news.articles?.count, "is current state")
         tableView.reloadData()
     }
     

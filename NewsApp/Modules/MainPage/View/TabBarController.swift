@@ -21,6 +21,16 @@ class TabBarController: UIViewController {
         super.viewDidLoad()
         presenter?.setPages()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
 }
 
 extension TabBarController: ViewInitalizationProtocol {
@@ -40,15 +50,13 @@ extension TabBarController: ViewInitalizationProtocol {
     private func stylizePage(_ viewController: UIViewController, title: String?, icon: UIImage?) {
         viewController.tabBarItem.title = title
         viewController.tabBarItem.image = icon
-        
-        viewController.navigationController?.navigationBar.isHidden = true
-
     }
 }
 
 extension TabBarController: TabBarViewProtocol {
     func setPages(_ viewControllers: [UIViewController]) {
         print("TAB BAR")
-        pagesTabBarController.setViewControllers(viewControllers, animated: true)
+        let navViewControllers = viewControllers.map { UINavigationController(rootViewController: $0) }
+        pagesTabBarController.setViewControllers(navViewControllers, animated: true)
     }
 }

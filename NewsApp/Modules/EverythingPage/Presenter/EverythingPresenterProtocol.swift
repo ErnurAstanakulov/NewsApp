@@ -16,6 +16,7 @@ protocol BasePresenterProtocol {
     func loadNews()
     var page: Int { get set }
     var artObjects: [ArticleObject] { get set }
+    func showDetail(_ article: ArticleObject)
 }
 
 extension BasePresenterProtocol {

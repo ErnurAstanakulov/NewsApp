@@ -13,9 +13,8 @@ protocol ModuleRouterProtocol {
     var moduleBuilder: ModuleBuilderProtocol { get set }
 }
 
-protocol RouterProtocol: ModuleRouterProtocol {
-    init(navigationController: UINavigationController, moduleBuilder: ModuleBuilderProtocol)
+protocol RouterProtocol: class, ModuleRouterProtocol {
     func initialViewController()
-    func createTopHeadlines()
-    func createEverythins()
+    func createEverythingDetail(_ article: ArticleObject)
+    func createTopHeadlinesDetail(_ article: ArticleObject)
 }

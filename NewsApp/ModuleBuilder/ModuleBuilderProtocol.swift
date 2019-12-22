@@ -9,7 +9,9 @@
 import UIKit
 
 protocol ModuleBuilderProtocol {
-    func createTopHeadlines(router: RouterProtocol) -> UIViewController
-    func createEverything(router: RouterProtocol) -> UIViewController
+    func createTopHeadlines() -> UIViewController
+    func createEverything() -> UIViewController
     func createTabBar(router: RouterProtocol) -> UIViewController
+    func createEverythingDetail(router: RouterProtocol, with article: ArticleObject) -> UIViewController
+    func createTopHeadlinesDetail(router: RouterProtocol, with article: ArticleObject) -> UIViewController
 }

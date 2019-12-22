@@ -18,11 +18,11 @@ class TabBarPresenter: TabBarPresenterProtocol {
     }
     
     func setPages() {
-        let topHeadlineViewController = router.moduleBuilder.createTopHeadlines(router: router)
+        let topHeadlineViewController = router.moduleBuilder.createTopHeadlines()
         let topHeadlineTabItem = TabItem(icon: NewsAppImage.topHeadline.uiImage, title: "TOP")
         topHeadlineViewController.tabBarItem.title = topHeadlineTabItem.title
         topHeadlineViewController.tabBarItem.image = topHeadlineTabItem.icon
-        let everythingViewController = router.moduleBuilder.createEverything(router: router)
+        let everythingViewController = router.moduleBuilder.createEverything()
         let everythingTabItem = TabItem(icon: NewsAppImage.everything.uiImage, title: "EVERYTHING")
         everythingViewController.tabBarItem.title = everythingTabItem.title
         everythingViewController.tabBarItem.image = everythingTabItem.icon

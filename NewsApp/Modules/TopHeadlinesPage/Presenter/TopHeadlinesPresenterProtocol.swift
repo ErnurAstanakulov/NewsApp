@@ -10,4 +10,5 @@ import Foundation
 
 protocol TopHeadlinesPresenterProtocol: BasePresenterProtocol {
     init(view: TopHeadlinesViewProtocol, router: RouterProtocol, services: AppServices)
+    func backgroundTimer()
 }

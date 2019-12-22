@@ -13,8 +13,16 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
     var page: Int = 1
     var artObjects: [ArticleObject] = []
     var timer: Timer?
+    private let quene = DispatchQueue(label: "concurrent", attributes: .concurrent)
     var lastNews: News?
-    var lastUpdateDate: Date?
+    var firstNews: News?
+    var news: News? {
+        var new: News?
+        quene.sync {
+            new = self.lastNews
+        }
+        return new
+    }
     
     weak var view: TopHeadlinesViewProtocol?
     let router: RouterProtocol
@@ -29,29 +37,26 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
     func backgroundTimer() {
         timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(performRepeat), userInfo: nil, repeats: true)
     }
+    
     @objc func performRepeat() {
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            print("Date: ", self.timer?.fireDate)
-            self.page = 1
+            print("1: ", Thread.current)
             self.loadTopHeadlines(page: 1) { [weak self] result in
                 guard let presenter = self else {
                     return
                 }
                 switch result {
                 case .success(let news):
-//                    let dates = news.articles?.map({ (str) -> Date? in
-//                        guard let str = str.publishedAt else { return nil }
-//                        let dateFormatter = DateFormatter()
-//                        dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZZZ"
-//                        return dateFormatter.date(from: str)
-//                    })
-                    
                     presenter.view?.showActivityIndicator(false)
-                    if presenter.lastNews != news {
-                        presenter.lastNews = news
-                        presenter.lastUpdateDate = presenter.timer?.fireDate
-                        presenter.performShows(news)
+                    if presenter.firstNews != news {
+                        print("CHECK THERE: /(\(news.articles?.first?.author))")
+                        print("CHECK THERE 2: /(\(presenter.firstNews?.articles?.first?.author))")
+                        presenter.quene.async(flags: .barrier) {
+                            print("5: ", Thread.current)
+                            presenter.lastNews = news
+                        }
+                        presenter.performShows()
                     }
                 case .failure(let error):
                     presenter.view?.showMessage(with: error)
@@ -60,11 +65,16 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
         }
     }
     
-    func performShows(_ news: News) {
-        var l = self
-        let object = l.localSave(news)
-        services.coreDataService.save(object, to: .topHeadlines)
-        view?.showNews(object)
+    func performShows() {
+        print("2: ", Thread.current)
+        DispatchQueue.main.async {
+            guard let news = self.news else { return }
+                  var l = self
+                  let object = l.localSave(news)
+                  self.services.coreDataService.save(object, to: .topHeadlines)
+            self.view?.showNews(object)
+        }
+      
     }
     
     func loadNews() {
@@ -74,17 +84,23 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
             view?.showNews(news)
         } else {
             loadTopHeadlines(page: page) { [weak self] result in
-                guard var presenter = self else {
+                guard let presenter = self else {
                     return
                 }
                 switch result {
                 case .success(let news):
                     presenter.view?.showActivityIndicator(false)
-//                    let object = presenter.localSave(news)
-//                    presenter.services.coreDataService.save(object, to: .topHeadlines)
-//                    presenter.lastNews = news
-                    presenter.performShows(news)
-//                    presenter.view?.showNews(object)
+                    print("4: ", Thread.current)
+                    if presenter.page == 1 {
+                        presenter.firstNews = news
+                        print("CHECK HERE: /(\(news.articles?.first?.author))")
+                    }
+                    presenter.quene.async(flags: .barrier) {
+                        print("3: ", Thread.current)
+                        presenter.lastNews =  news
+                    }
+                    presenter.page += 1
+                    presenter.performShows()
                 case .failure(let error):
                     presenter.view?.showMessage(with: error)
                 }

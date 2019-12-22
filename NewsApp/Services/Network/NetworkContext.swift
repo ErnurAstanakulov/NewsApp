@@ -19,7 +19,7 @@ protocol NetworkContext {
 
 extension NetworkContext {
     
-    var apiKey: String { return "18feb187048045eb87fe7e476cdc9f8a" }
+    var apiKey: String { return "6bcfd5ef05d54485aa74c33eca24b05c" }
     
     var urlString: String { return route.urlString }
     

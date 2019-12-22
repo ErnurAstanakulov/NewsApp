@@ -49,7 +49,7 @@ class TopHeadlinesViewController: UIViewController, UITableViewDelegate, UITable
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let articles = news?.articles else { return }
         if indexPath.row == articles.count - 1, UIDevice.isConnectedToNetwork {
-//            presenter.loadNews()
+            presenter.loadNews()
         }
     }
 }

@@ -16,7 +16,7 @@ class EverythingViewController: UIViewController {
     var activityIndicator = UIActivityIndicatorView(style: .large)
     
     // MARK: - Properties
-    var presenter: EverythingPresenterProtocol?
+    var presenter: BasePresenterProtocol?
     var news: NewsObject?
 
     // MARK: - UI LifeCycle
@@ -75,7 +75,7 @@ extension EverythingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: EverythingCell = tableView.dequeueReusableCell(withIdentifier: String(describing: EverythingCell.self)) as! EverythingCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EverythingCell.self)) as! EverythingCell
         cell.textLabel?.text = String(news?.articles?[indexPath.row].descriptionNews ?? "")
         cell.textLabel?.numberOfLines = 0
         return cell
@@ -89,15 +89,17 @@ extension EverythingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let articles = news?.articles else { return }
-        if indexPath.row == articles.count - 1, UIDevice.isConnectedToNetwork {
+        guard let total = news?.totalResults, let articles = news?.articles else { return }
+        if indexPath.row == articles.count - 1, total > articles.count, UIDevice.isConnectedToNetwork {
             presenter?.loadNews()
         }
     }
 }
 
-extension EverythingViewController: ActivityIndicatorProtocol {
-    
+extension EverythingViewController: ActivityIndicatorProtocol {    
+    func showActivityIndicator(_ isShow: Bool) {
+        showActivityIndicatior(show: isShow)
+    }
 }
 
 extension EverythingViewController {
@@ -122,9 +124,5 @@ extension EverythingViewController: EverythingViewProtocol {
         self.news = news
         stopRefresh()
         tableView.reloadData()
-    }
-    
-    func showActivityIndicator(_ isShow: Bool) {
-        showActivityIndicatior(show: isShow)
     }
 }

@@ -24,7 +24,7 @@ extension Route {
         case .everyThing:
             return "everything"
         case .topHeadlines:
-            return "top-headlines?country=us&"
+            return "top-headlines"
         }
     }
 }

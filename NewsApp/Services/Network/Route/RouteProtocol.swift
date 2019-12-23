@@ -23,4 +23,3 @@ public extension RouteProtocol {
     /// Get complete URL route
     var urlString: String { return serverUrl + rawValue }
 }
-

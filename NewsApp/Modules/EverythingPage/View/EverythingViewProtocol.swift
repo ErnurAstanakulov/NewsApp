@@ -8,5 +8,4 @@
 
 import Foundation
 
-protocol EverythingViewProtocol: BaseViewProtocol {
-}
+protocol EverythingViewProtocol: BaseViewProtocol { }

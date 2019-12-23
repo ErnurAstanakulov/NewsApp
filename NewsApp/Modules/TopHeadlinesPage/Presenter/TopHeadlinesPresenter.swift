@@ -11,10 +11,11 @@ import UIKit
 class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
     
     // MARK:- Properties
-    private let quene = DispatchQueue(label: "concurrent", attributes: .concurrent)
-    var page: Int = 1
-    var artObjects: [ArticleObject] = []
-    var timer: Timer?
+    var quene: DispatchQueue {
+        return DispatchQueue(label: "concurrent", qos: .background, attributes: .concurrent) }
+    var dispatchSourceTimer: DispatchSourceTimer!
+    var page = 1
+    var artObjects = [ArticleObject]()
     var lastNews: News?
     var firstNews: News?
     var news: News? {
@@ -36,44 +37,42 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
     }
     
     deinit {
-        timer = nil
+        dispatchSourceTimer.setEventHandler(handler: {})
+        dispatchSourceTimer.cancel()
+        dispatchSourceTimer.resume()
     }
     
     // MARK:- Repeate request news
-    func backgroundTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(performRepeat), userInfo: nil, repeats: true)
-    }
-    
-    @objc func performRepeat() {
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            guard let self = self else { return }
-            print("1: ", Thread.current)
+    func performBackgroundDispatchTimer() {
+        dispatchSourceTimer = DispatchSource.makeTimerSource(queue: quene)
+        dispatchSourceTimer.schedule(deadline: .now(), repeating: .seconds(5), leeway: .microseconds(300))
+        dispatchSourceTimer.setEventHandler {
+            print("3: THREAD", Thread.current)
             self.loadTopHeadlines(page: 1) { [weak self] result in
+                print("5: THREAD", Thread.current)
                 guard let presenter = self else {
                     return
                 }
                 switch result {
                 case .success(let news):
-                    presenter.view?.showActivityIndicator(false)
                     if presenter.firstNews != news {
-                        print("CHECK THERE: /(\(String(describing: news.articles?.first?.author)))")
                         print("CHECK THERE 2: /(\(String(describing: presenter.firstNews?.articles?.first?.author)))")
                         presenter.quene.async(flags: .barrier) {
-                            print("5: ", Thread.current)
+                            print("6: ", Thread.current)
                             presenter.lastNews = news
                         }
-                        presenter.performShows()
                     }
                 case .failure(let error):
                     presenter.view?.showMessage(with: error)
                 }
             }
         }
+        dispatchSourceTimer.resume()
     }
     
     // MARK:- Loading news
     func loadNews() {
-        view?.showActivityIndicator(true)
+        view.showActivityIndicator(true)
         if let news = services.coreDataService.getNews(for: .topHeadlines), !UIDevice.isConnectedToNetwork {
             view?.showActivityIndicator(false)
             view?.showNews(news)
@@ -82,19 +81,15 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
                 guard let presenter = self else {
                     return
                 }
+                presenter.view?.showActivityIndicator(false)
                 switch result {
                 case .success(let news):
-                    presenter.view?.showActivityIndicator(false)
                     print("4: ", Thread.current)
                     if presenter.page == 1 {
                         presenter.firstNews = news
                         print("CHECK HERE: /(\(String(describing: news.articles?.first?.author)))")
                     }
-                    presenter.quene.async(flags: .barrier) {
-                        print("3: ", Thread.current)
-                        presenter.lastNews =  news
-                    }
-                    presenter.page += 1
+                    presenter.lastNews =  news
                     presenter.performShows()
                 case .failure(let error):
                     presenter.view.showMessage(with: error)
@@ -107,10 +102,15 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
         let networkContext = TopHeadlinesNetworkContext(page: page)
         services.networkService.load(networkContext: networkContext) { (networkResponse) in
             DispatchQueue.main.async {
-                if let news: News = networkResponse.decode() {
+                guard let news: News = networkResponse.decode() else {
+                    completion(.failure(networkResponse.networkError ?? NetworkError.unknown))
+                    return
+                }
+                
+                if news.status == .ok {
                     completion(.success(news))
                 } else {
-                    completion(.failure(networkResponse.networkError ?? NetworkError.unknown))
+                    completion(.failure(NetworkError.serverError(description: news.message!)))
                 }
             }
         }
@@ -121,10 +121,11 @@ class TopHeadlinesPresenter: TopHeadlinesPresenterProtocol {
         guard let news = self.news else { return }
         var l = self
         let object = l.localSave(news)
-        self.services.coreDataService.save(object, to: .topHeadlines)
         self.view.showNews(object)
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.services.coreDataService.save(object, to: .topHeadlines)
+        }
     }
-    
     
     // MARK:- Router
     func showDetail(_ article: ArticleObject) {

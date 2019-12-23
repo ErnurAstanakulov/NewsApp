@@ -11,12 +11,12 @@ import Foundation
 struct TopHeadlinesNetworkContext: NetworkContext {
     private let pageSize: Int = 15
     private let page: Int
-    private let theme = "us"
+    private let theme = "bbc-news"
     init(page: Int = 1) {
         self.page = page
     }
     var route: Route = .topHeadlines
     var method: NetworkMethod = .get
     var encoding: NetworkEncoding = .url
-    var parameters: [String : Any] { ["pageSize": String(pageSize), "page": String(page), "country": theme, "apiKey": apiKey] }
+    var parameters: [String : Any] { ["pageSize": String(pageSize), "page": String(page), "sources": theme, "apiKey": apiKey] }
 }

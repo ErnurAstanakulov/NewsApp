@@ -10,8 +10,10 @@ import Foundation
 
 protocol TopHeadlinesPresenterProtocol: BasePresenterProtocol {
     init(view: TopHeadlinesViewProtocol, router: RouterProtocol, services: AppServices)
-    func backgroundTimer()
+    func performBackgroundDispatchTimer()
     var lastNews: News? { get set }
     var firstNews: News? { get set }
     var news: News? { get }
+    var quene: DispatchQueue { get }
+    var dispatchSourceTimer: DispatchSourceTimer! { get set }
 }

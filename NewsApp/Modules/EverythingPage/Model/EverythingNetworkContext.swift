@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct EntityNetworkContext: NetworkContext {
+struct EverythingNetworkContext: NetworkContext {
     
     // MARK:- Properties
     private let pageSize: Int = 15

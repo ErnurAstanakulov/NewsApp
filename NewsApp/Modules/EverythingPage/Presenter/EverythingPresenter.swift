@@ -23,21 +23,28 @@ class EverythingPresenter: EverythingPresenterProtocol {
         self.router = router
     }
     
+    // MARK:- Load everyting news
+    
     func loadNews() {
         view.showActivityIndicator(true)
         if let news = appServices.coreDataService.getNews(for: .everything), !UIDevice.isConnectedToNetwork {
             view.showActivityIndicator(false)
             view.showNews(news)
         } else {
-            let networkContext = EntityNetworkContext(page: page)
+            let networkContext = EverythingNetworkContext(page: page)
             appServices.networkService.load(networkContext: networkContext, completion: { [weak self] networkResponse in
                 guard var self = self else { return }
                 DispatchQueue.main.async {
+                    self.view.showActivityIndicator(false)
                     if let news: News = networkResponse.decode() {
-                        self.view.showActivityIndicator(false)
-                        let object = self.localSave(news)
-                        self.appServices.coreDataService.save(object, to: .everything)
-                        self.view.showNews(object)
+                        if news.status == Status.ok {
+                            print("1: ", Thread.current)
+                            let object = self.localSave(news)
+                            self.appServices.coreDataService.save(object, to: .everything)
+                            self.view.showNews(object)
+                        } else {
+                            self.view.showMessage(with: NetworkError.serverError(description: news.message!))
+                        }
                     } else {
                         self.view.showMessage(with: networkResponse.networkError ?? NetworkError.unknown)
                     }
@@ -46,6 +53,7 @@ class EverythingPresenter: EverythingPresenterProtocol {
         }
     }
     
+    // MARK:- Routering
     func showDetail(_ article: ArticleObject) {
         router.createEverythingDetail(article)
     }

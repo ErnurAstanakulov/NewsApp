@@ -8,34 +8,39 @@
 
 import UIKit
 
-class TopHeadlinesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TopHeadlinesViewController: UIViewController {
     
     // MARK: - UIElements
-    var tableView = UITableView()
-    var activityIndicator = UIActivityIndicatorView(style: .large)
+    private let tableView = UITableView()
     private let refreshTableControl = UIRefreshControl()
+    var activityIndicator = UIActivityIndicatorView(style: .large)
 
     // MARK:- Properties
-    var presenter: TopHeadlinesPresenterProtocol!
+    var presenter: TopHeadlinesPresenterProtocol?
     var news: NewsObject?
 
     // MARK: - View Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         setupViews()
-        presenter.loadNews()
-        presenter.backgroundTimer()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presenter?.loadNews()
+        if UIDevice.isConnectedToNetwork { presenter?.performBackgroundDispatchTimer() }
+    }
+}
+
+extension TopHeadlinesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("COUNT \(news?.articles?.count)")
         return news?.articles?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: EverythingCell.self)) as! EverythingCell
-        let news = self.news?.articles?[indexPath.row]
-        cell.textLabel?.text = news?.descriptionNews
+        let article = self.news?.articles?[indexPath.row]
+        cell.textLabel?.text = article?.descriptionNews
         cell.textLabel?.numberOfLines = 0
         return cell
     }
@@ -43,20 +48,20 @@ class TopHeadlinesViewController: UIViewController, UITableViewDelegate, UITable
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let article = news?.articles?[indexPath.row] else { return }
-        presenter.showDetail(article)
+        presenter?.showDetail(article)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let articles = news?.articles else { return }
-        if indexPath.row == articles.count - 1, UIDevice.isConnectedToNetwork {
-            presenter.loadNews()
+        guard let total = news?.totalResults, let articles = news?.articles else { return }
+        if indexPath.row == articles.count - 1, total > articles.count, UIDevice.isConnectedToNetwork {
+            presenter?.loadNews()
         }
     }
 }
 
 extension TopHeadlinesViewController {
     @objc func performRefresh() {
-        presenter.didRefresh()
+        presenter?.didRefresh()
     }
     
     private func stopRefresh() {
@@ -93,13 +98,13 @@ extension TopHeadlinesViewController: ViewInitalizationProtocol {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         activityIndicator.hidesWhenStopped = true
-        tableView.refreshControl = refreshTableControl
-        tableView.dataSource = self
-        tableView.delegate = self
     }
     
     func extraTasks() {
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(EverythingCell.self, forCellReuseIdentifier: String(describing: EverythingCell.self))
+        tableView.refreshControl = refreshTableControl
         refreshTableControl.addTarget(self, action: #selector(performRefresh), for: .valueChanged)
     }
 }

@@ -9,6 +9,7 @@
 import Foundation
 
 protocol BaseViewProtocol: class {
+    var news: NewsObject? { get set }
     func showNews(_ news: NewsObject)
     func showActivityIndicator(_ isShow: Bool)
     func showMessage(with error: NetworkError)

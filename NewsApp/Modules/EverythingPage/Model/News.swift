@@ -9,7 +9,9 @@
 import Foundation
 
 struct News: Codable, Equatable {
-    let status: String?
+    let status: Status?
     let totalResults: Int?
     var articles: [Article]?
+    var code: String?
+    var message: String?
 }

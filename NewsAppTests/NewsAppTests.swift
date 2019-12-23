@@ -98,7 +98,7 @@ class NewsAppTests: XCTestCase {
         appService = MockAppService(networkService: networkService, coreDataService: coreDataService)
         
         var catchNews: News?
-        let context = EntityNetworkContext()
+        let context = EverythingNetworkContext()
         networkService.load(networkContext: context) { (networkResponse) in
             if let news: News = networkResponse.decode() {
                 catchNews = news

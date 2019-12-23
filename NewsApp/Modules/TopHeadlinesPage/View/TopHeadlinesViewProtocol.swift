@@ -8,6 +8,4 @@
 
 import Foundation
 
-protocol TopHeadlinesViewProtocol: BaseViewProtocol {
-    var news: NewsObject? { get set }
-}
+protocol TopHeadlinesViewProtocol: BaseViewProtocol { }

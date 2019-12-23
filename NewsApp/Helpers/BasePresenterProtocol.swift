@@ -24,7 +24,7 @@ extension BasePresenterProtocol {
             artObjects.append(art)
         }
         page += 1
-        return NewsObject(status: news.status, totalResults: news.totalResults, articles: artObjects)
+        return NewsObject(status: news.status.map { $0.rawValue }, totalResults: news.totalResults, articles: artObjects)
     }
     
     mutating func didRefresh() {

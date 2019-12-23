@@ -30,7 +30,7 @@
 		76098A4423AE4813003F021B /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76098A4323AE4813003F021B /* NetworkError.swift */; };
 		76098A4623AE48B6003F021B /* FailureNetworkResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76098A4523AE48B6003F021B /* FailureNetworkResponse.swift */; };
 		76098A4823AE4C9F003F021B /* SuccessNetworkResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76098A4723AE4C9F003F021B /* SuccessNetworkResponse.swift */; };
-		76098A4A23AE58D3003F021B /* EntityNetworkContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76098A4923AE58D3003F021B /* EntityNetworkContext.swift */; };
+		76098A4A23AE58D3003F021B /* EverythingNetworkContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76098A4923AE58D3003F021B /* EverythingNetworkContext.swift */; };
 		76098A4D23AE5C4B003F021B /* RouterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76098A4C23AE5C4B003F021B /* RouterProtocol.swift */; };
 		76098A4F23AE5C50003F021B /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76098A4E23AE5C50003F021B /* Router.swift */; };
 		76098A5123AE5DD2003F021B /* ModuleBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76098A5023AE5DD2003F021B /* ModuleBuilderProtocol.swift */; };
@@ -45,6 +45,8 @@
 		7617A31C23AF8D8D002F3EE5 /* BaseDetailViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7617A31B23AF8D8D002F3EE5 /* BaseDetailViewProtocol.swift */; };
 		7617A31E23AF8ECC002F3EE5 /* BaseDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7617A31D23AF8ECC002F3EE5 /* BaseDetailPresenter.swift */; };
 		7617A32023AF8ED2002F3EE5 /* BaseDetailPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7617A31F23AF8ED2002F3EE5 /* BaseDetailPresenterProtocol.swift */; };
+		7626458C23B10AC50067ABB9 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7626458B23B10AC50067ABB9 /* Result.swift */; };
+		7626458E23B10BA50067ABB9 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7626458D23B10BA50067ABB9 /* Status.swift */; };
 		76987EE623AE6F5500869280 /* ViewInitalizationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76987EE523AE6F5500869280 /* ViewInitalizationProtocol.swift */; };
 		76987EE823AE701D00869280 /* UIVIew + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76987EE723AE701D00869280 /* UIVIew + extension.swift */; };
 		76A023AD23B01969005C0B1E /* CoreDataServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A023AC23B01969005C0B1E /* CoreDataServiceProtocol.swift */; };
@@ -109,7 +111,7 @@
 		76098A4323AE4813003F021B /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		76098A4523AE48B6003F021B /* FailureNetworkResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailureNetworkResponse.swift; sourceTree = "<group>"; };
 		76098A4723AE4C9F003F021B /* SuccessNetworkResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessNetworkResponse.swift; sourceTree = "<group>"; };
-		76098A4923AE58D3003F021B /* EntityNetworkContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityNetworkContext.swift; sourceTree = "<group>"; };
+		76098A4923AE58D3003F021B /* EverythingNetworkContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverythingNetworkContext.swift; sourceTree = "<group>"; };
 		76098A4C23AE5C4B003F021B /* RouterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterProtocol.swift; sourceTree = "<group>"; };
 		76098A4E23AE5C50003F021B /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		76098A5023AE5DD2003F021B /* ModuleBuilderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleBuilderProtocol.swift; sourceTree = "<group>"; };
@@ -124,6 +126,8 @@
 		7617A31B23AF8D8D002F3EE5 /* BaseDetailViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDetailViewProtocol.swift; sourceTree = "<group>"; };
 		7617A31D23AF8ECC002F3EE5 /* BaseDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDetailPresenter.swift; sourceTree = "<group>"; };
 		7617A31F23AF8ED2002F3EE5 /* BaseDetailPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDetailPresenterProtocol.swift; sourceTree = "<group>"; };
+		7626458B23B10AC50067ABB9 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		7626458D23B10BA50067ABB9 /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		76987EE523AE6F5500869280 /* ViewInitalizationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewInitalizationProtocol.swift; sourceTree = "<group>"; };
 		76987EE723AE701D00869280 /* UIVIew + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIVIew + extension.swift"; sourceTree = "<group>"; };
 		76A023AC23B01969005C0B1E /* CoreDataServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceProtocol.swift; sourceTree = "<group>"; };
@@ -239,8 +243,8 @@
 			isa = PBXGroup;
 			children = (
 				76098A5223AE67E9003F021B /* MainPage */,
-				76098A2323AE37A2003F021B /* EverythingPage */,
 				76098A2123AE3781003F021B /* TopHeadlinesPage */,
+				76098A2323AE37A2003F021B /* EverythingPage */,
 				7617A31523AF8D5E002F3EE5 /* DetailPage */,
 			);
 			path = Modules;
@@ -260,9 +264,10 @@
 			isa = PBXGroup;
 			children = (
 				76098A3523AE3FDF003F021B /* News.swift */,
+				7626458D23B10BA50067ABB9 /* Status.swift */,
 				76A023B823B01B19005C0B1E /* Article.swift */,
 				76A023BA23B01B2A005C0B1E /* Source.swift */,
-				76098A4923AE58D3003F021B /* EntityNetworkContext.swift */,
+				76098A4923AE58D3003F021B /* EverythingNetworkContext.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -304,6 +309,7 @@
 				76A023B523B01A24005C0B1E /* Route */,
 				76A023B423B01A03005C0B1E /* Response */,
 				76098A3123AE3E0D003F021B /* NetworkService.swift */,
+				7626458B23B10AC50067ABB9 /* Result.swift */,
 				76098A3323AE3E3D003F021B /* NetworkServiceProtocol.swift */,
 			);
 			path = Network;
@@ -605,6 +611,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7626458C23B10AC50067ABB9 /* Result.swift in Sources */,
 				76098A3223AE3E0D003F021B /* NetworkService.swift in Sources */,
 				76098A5423AE67FF003F021B /* TabBarController.swift in Sources */,
 				76F4481323AEBF2600AA7F09 /* TopHeadlinesViewProtocol.swift in Sources */,
@@ -615,6 +622,7 @@
 				76A6AFC023AE743600B0A4E3 /* NewsAppImage.swift in Sources */,
 				76098A4223AE47E6003F021B /* NetworkEncoding.swift in Sources */,
 				76098A4623AE48B6003F021B /* FailureNetworkResponse.swift in Sources */,
+				7626458E23B10BA50067ABB9 /* Status.swift in Sources */,
 				76098A2C23AE37FA003F021B /* EverythingPresenterProtocol.swift in Sources */,
 				76098A4D23AE5C4B003F021B /* RouterProtocol.swift in Sources */,
 				76A023B323B019E2005C0B1E /* SourceObject.swift in Sources */,
@@ -661,7 +669,7 @@
 				7617A31E23AF8ECC002F3EE5 /* BaseDetailPresenter.swift in Sources */,
 				76A023AD23B01969005C0B1E /* CoreDataServiceProtocol.swift in Sources */,
 				76A023BF23B01C1F005C0B1E /* BasePresenterProtocol.swift in Sources */,
-				76098A4A23AE58D3003F021B /* EntityNetworkContext.swift in Sources */,
+				76098A4A23AE58D3003F021B /* EverythingNetworkContext.swift in Sources */,
 				76A023AF23B019A4005C0B1E /* NewsObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

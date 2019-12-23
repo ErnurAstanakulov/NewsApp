@@ -7,10 +7,7 @@
 //
 
 import Foundation
-enum Result<T>{
-    case success(T)
-    case failure(NetworkError)
-}
+
 class NetworkService: NetworkServiceProtocol {
     func load(networkContext: NetworkContext, completion: @escaping (NetworkResponse) -> Void) {
         guard let request = urlRequestFrom(networkContext: networkContext) else {

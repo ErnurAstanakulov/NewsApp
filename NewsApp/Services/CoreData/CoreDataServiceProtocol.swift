@@ -14,5 +14,5 @@ protocol CoreDataServiceProtocol {
 }
 
 protocol CoreDataProvider {
-    var coreDataService: CoreDataServiceProtocol { get }
+    var coreDataService: CoreDataServiceProtocol { get set }
 }

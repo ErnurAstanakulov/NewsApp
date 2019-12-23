@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Article: Decodable, Equatable {
+struct Article: Codable, Equatable {
     var source: Source?
     var author: String?
     var title: String?

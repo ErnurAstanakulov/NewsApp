@@ -11,3 +11,7 @@ import Foundation
 protocol NetworkServiceProtocol {
     func load(networkContext: NetworkContext, completion: @escaping (NetworkResponse) -> Void)
 }
+
+protocol NetworkProvider {
+    var networkService: NetworkServiceProtocol { get set }
+}

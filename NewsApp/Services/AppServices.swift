@@ -12,11 +12,7 @@ protocol AppServicesProtocol: class, CoreDataProvider, NetworkProvider { }
 
 class AppServices: AppServicesProtocol {
     // MARK:- Services
-    var coreDataService: CoreDataServiceProtocol { return CoreDataStackService() }
-    var networkService: NetworkServiceProtocol { return NetworkService() }
-}
-
-protocol NetworkProvider {
-    var networkService: NetworkServiceProtocol { get }
+    var coreDataService: CoreDataServiceProtocol = CoreDataStackService()
+    var networkService: NetworkServiceProtocol = NetworkService()
 }
 

@@ -8,27 +8,103 @@
 
 import XCTest
 @testable import NewsApp
+class MockEverythingView: BaseViewProtocol {
+    func showNews(_ news: NewsObject) {
+        
+    }
+    
+    func showActivityIndicator(_ isShow: Bool) {
+        
+    }
+    
+    func showMessage(with error: NetworkError) {
+        
+    }
+}
+
+class MockCoreDataService: CoreDataServiceProtocol {
+    func getNews(for entity: DataEntity) -> NewsObject? {
+        return nil
+    }
+    
+    func save(_ news: NewsObject, to entity: DataEntity) {}
+}
+
+class MockNetworkService: NetworkServiceProtocol {
+    var response: NetworkResponse!
+    
+    init() {}
+    
+    convenience init(response: NetworkResponse) {
+        self.init()
+        self.response = response
+    }
+    
+    func load(networkContext: NetworkContext, completion: @escaping (NetworkResponse) -> Void) {
+        if let response = response {
+            completion(response)
+        } else {
+            completion(FailureNetworkResponse(networkError: .serverError(description: "test request finished with error")))
+        }
+    }
+}
+
+
+class MockAppService: AppServicesProtocol {
+    var coreDataService: CoreDataServiceProtocol
+    
+    var networkService: NetworkServiceProtocol
+    
+    init(networkService: NetworkServiceProtocol, coreDataService: CoreDataServiceProtocol) {
+        self.networkService = networkService
+        self.coreDataService = coreDataService
+    }
+    
+}
 
 class NewsAppTests: XCTestCase {
 
+    var view: MockEverythingView!
+    var presenter: EverythingPresenter!
+    var appService: AppServicesProtocol!
+    var networkService: NetworkServiceProtocol!
+    var coreDataService: CoreDataServiceProtocol!
+    var router: RouterProtocol!
+    var news: News?
+    
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        router = Router(navigationController: UINavigationController(), moduleBuilder: ModuleBuilder())
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        view = nil
+        presenter = nil
+        appService = nil
+        networkService = nil
+        coreDataService = nil
     }
 
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+        let source = Source(id: nil, name: nil)
+        let articles = [
+            Article(source: source, author: "Bar", title: "Baz", description: "Bar", url: "Bar", urlToImage: "Bar", publishedAt: "Bar", content: "Bar")
+        ]
+        news = News(status: "ok", totalResults: 112, articles: articles)
+        let data = try! JSONEncoder().encode(news)
+        let networkResponse = SuccessNetworkResponse(data: data)
+        
+        networkService = MockNetworkService(response: networkResponse)
+        coreDataService = MockCoreDataService()
+        appService = MockAppService(networkService: networkService, coreDataService: coreDataService)
+        
+        var catchNews: News?
+        let context = EntityNetworkContext()
+        networkService.load(networkContext: context) { (networkResponse) in
+            if let news: News = networkResponse.decode() {
+                catchNews = news
+            }
         }
+        
+        XCTAssertEqual(catchNews, news)
     }
-
 }

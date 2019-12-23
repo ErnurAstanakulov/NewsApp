@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct News: Decodable, Equatable {
+struct News: Codable, Equatable {
     let status: String?
     let totalResults: Int?
     var articles: [Article]?

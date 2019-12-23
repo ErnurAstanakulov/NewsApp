@@ -9,6 +9,8 @@
 import XCTest
 @testable import NewsApp
 class MockEverythingView: BaseViewProtocol {
+    var news: NewsObject? 
+
     func showNews(_ news: NewsObject) {
         
     }
@@ -85,11 +87,12 @@ class NewsAppTests: XCTestCase {
     }
 
     func testExample() {
+    
         let source = Source(id: nil, name: nil)
         let articles = [
             Article(source: source, author: "Bar", title: "Baz", description: "Bar", url: "Bar", urlToImage: "Bar", publishedAt: "Bar", content: "Bar")
         ]
-        news = News(status: "ok", totalResults: 112, articles: articles)
+        news = News(status: .ok, totalResults: 112, articles: articles)
         let data = try! JSONEncoder().encode(news)
         let networkResponse = SuccessNetworkResponse(data: data)
         
